@@ -32,7 +32,7 @@
                             <div class="form-group mb-3 col-xs-12 col-sm-6">
                                 <label
                                     for="price"
-                                >Price in $</label
+                                >Price</label
                                 >
                                 <input
                                     id="price"

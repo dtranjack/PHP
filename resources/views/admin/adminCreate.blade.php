@@ -32,7 +32,7 @@
                                     <div class="form-group mb-3 col-xs-12 col-sm-6">
                                         <label
                                             for="price"
-                                        >Price in $</label
+                                        >Price</label
                                         >
                                         <input
                                             id="price"
@@ -83,11 +83,17 @@
                                     <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="col-12">
+                                <div class="col-12 mt-3">
                                     <button type="submit" class="btn btn-primary btn-block text-uppercase">Create
                                         Product
                                     </button>
+                                    <div class="mt-3">
+                                        <a
+                                            href="/admin/product"
+                                            class="btn btn-primary btn-block text-uppercase mb-3">Back</a>
+                                    </div>
                                 </div>
+
                             </form>
                         </div>
                     </div>
