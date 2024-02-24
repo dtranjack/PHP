@@ -6,11 +6,36 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>@yield('title')</title>
+    <link href='https://fonts.googleapis.com/css?family=JetBrains Mono' rel='stylesheet'>
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="/css/fontawesome.min.css">
+    <link rel="stylesheet" href="{{ asset('css/templatemo-style.css') }}">
+    <script src="{{asset('js/jquery-3.3.1.min.js')}}"></script>
+    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+    @vite('resources/js/app.js')
 </head>
-<link href='https://fonts.googleapis.com/css?family=JetBrains Mono' rel='stylesheet'>
-<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
-<link rel="stylesheet" href="/css/fontawesome.min.css">
-<link rel="stylesheet" href="{{ asset('css/templatemo-style.css') }}">
+
+<style>
+    .input-group {
+        display: flex;
+        align-items: center; /* Align items vertically in the center */
+    }
+
+    .input-group .form-control {
+        width: auto; /* Let the input grow to fit its content */
+    }
+
+    .input-group .btn {
+        margin-left: 10px; /* Adjust margin between input and button */
+    }
+
+    /* Media query for larger screens */
+    @media (min-width: 768px) {
+        .input-group .form-control {
+            width: 200px; /* Set a fixed width for the search input on larger screens */
+        }
+    }
+</style>
 
 <body>
 <nav class="navbar navbar-expand-xl">
@@ -44,18 +69,51 @@
                     </a>
                 </li>
             </ul>
-            <form action="{{ route('admin.search') }}" method="GET" class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2 w-200" type="search" placeholder="Search" aria-label="Search" name="query">
-                <button class="btn btn-outline-light my-2 my-sm-0" type="submit">
-                    <i class="fas fa-search"></i>
-                </button>
-            </form>
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link d-block" href="/admin/login">
-                        <b>Logout</b>
-                    </a>
-                </li>
+            <ul class="navbar-nav mx-auto h-100">
+                <form action="{{ route('admin.search') }}" method="GET" class="form-inline my-2 my-lg-0">
+                    <div class="input-group">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"
+                               name="query">
+                        <button class="btn btn-outline-light my-2 my-sm-0" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+
+            </ul>
+            <ul class="navbar-nav mx-auto h-100">
+                @guest
+                    @if (Route::has('login'))
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                        </li>
+                    @endif
+
+                    @if (Route::has('register'))
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                        </li>
+                    @endif
+                @else
+                    <li class="nav-item dropdown">
+                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                           data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                            Welcome, {{ Auth::user()->name }}
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{{ route('logout') }}"
+                               onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                {{ __('Logout') }}
+                            </a>
+
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form>
+                        </div>
+                    </li>
+                @endguest
             </ul>
         </div>
     </div>

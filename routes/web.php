@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 
@@ -88,8 +90,11 @@ Auth::routes();
 Route::get('/', [ProductController::class, 'index']);
 Route::get('admin/product', [ProductController::class, 'index'])->name('admin.product.index');
 Route::get('admin/login',function (){
-    return view('admin.Login');
-});
+    return view('auth.login');
+})->name('admin.login');
+Route::get('admin/register',function (){
+    return view('auth.register');
+})->name('admin.register');
 Route::get('admin/product/create',[ProductController::class, 'create'])->name('admin.product.create');
 Route::post('admin/product/store',[ProductController::class, 'store'])->name('admin.product.store');
 Route::get('admin/product/edit/{id}', [ProductController::class, 'edit'])->name('admin.product.edit');
@@ -99,4 +104,5 @@ Route::delete('admin/product/delete/{id}', [ProductController::class, 'destroy']
 Route::put('admin/product/recover/{id}', [ProductController::class, 'recover'])->name('admin.product.recover');
 Route::put('admin/product/recoverAll', [ProductController::class, 'recoverAll'])->name('admin.product.recoverAll');
 Route::get('admin/product/removedList', [ProductController::class, 'showHiddenItem'])->name('admin.product.removedList');
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('logout/redirect', [LoginController::class, 'logoutAndRedirect'])->name('logout.redirect');
+

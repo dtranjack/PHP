@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
+
 
 class ProductController extends Controller
 {
@@ -15,54 +17,15 @@ class ProductController extends Controller
     // product
     public function index()
     {
-//        $data = DB::table('product_tbl')->where('name', '<>', 'samsung')->orWhere('id', ">", "3")->get();
-//        $data = DB::table('product_tbl')->inRandomOrder()->get();
-//        try {
-//            DB::table('product_tbl')->insert([
-//                ['id' => 5, 'name' => 'Coder'],
-//                ['id' => 6, 'name' => 'wawa']
-//            ]);
-//
-//            $result = "Insert successful!";
-//            printf($result);
-//        } catch (QueryException $e) {
-//            // Check if the error code indicates a duplicate key violation
-//            if ($e == '23000') {
-//                printf( "Duplicate key violation: This record already exists.") ;
-//            } else {
-//                // Handle other database-related errors
-//                echo "Database error: " . $e->getMessage();
-//            }
-//        }
-//        try {
-//            DB::table('product_tbl')->where('id',10)->update(['name' => 'Samsung 1']);
-//            $result = "Update successful!";
-//            echo($result);
-//        } catch (QueryException $e) {
-//            echo $e->getMessage();
-//        }
-//        try {
-//            DB::table('product_tbl')->where('id',10)->where('id','=','1')->delete();
-//            $result = "Delete successful!";
-//            echo($result);
-//        } catch (QueryException $e) {
-//            echo $e->getMessage();
-//        }
         $successMessage = session('success');
         $successRecoverMsg = session('successRecovery');
         $successRecoverAllMsg = session('successRecoveryAll');
         $successUpdatedMsg = session('successUpdated');
         $successCreateMsg = session('successCreate');
-        $data = DB::table('product_tbl')->where('status', 1)->get();
-//        print_r($data);
-        return view('admin.ProductList', ["data" => $data, "successMessage" => $successMessage,
-                "successRecoveryMsg" => $successRecoverMsg,
-                "successUpdatedMsg" => $successUpdatedMsg,
-                "successRecoverAllMsg" => $successRecoverAllMsg,
-                "successCreateMsg" => $successCreateMsg
-            ]
-        );
+        $data = DB::table('product_tbl')->where('status', 1)->paginate(10); // Change 10 to your desired items per page
+        return view('admin.ProductList', compact('data', 'successMessage', 'successRecoverMsg', 'successUpdatedMsg', 'successRecoverAllMsg', 'successCreateMsg'));
     }
+
 
     public function search(Request $request)
     {
@@ -72,7 +35,7 @@ class ProductController extends Controller
                 $queryBuilder->where('id', $query)
                     ->orWhere('name', 'like', '%' . $query . '%')
                     ->orWhere('manufacturer', 'like', '%' . $query . '%');
-            })->get();
+            })->paginate(10);
         return view('admin.ProductList', ["data" => $data]);
     }
 
@@ -181,7 +144,7 @@ class ProductController extends Controller
 
     public function showHiddenItem()
     {
-        $data = DB::table('product_tbl')->where('status', 0)->get();
+        $data = DB::table('product_tbl')->where('status', 0)->paginate(10);
         return view('admin.adminDeletedItem', ["data" => $data]);
     }
 
@@ -196,4 +159,5 @@ class ProductController extends Controller
         $recover = DB::table('product_tbl')->where('status', '0')->update(['status' => 1]);
         return redirect()->route('admin.product.index')->with('successRecoveryAll', 'All Product recovered successfully');
     }
+
 }
