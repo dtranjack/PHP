@@ -54,11 +54,11 @@ class ProductController extends Controller
     {
         // api url : /product (method : post)
         $request->validate([
-            'name' => 'required|string|max:255',
-            'price' => 'required|numeric',
-            'size' => 'required|integer',
+            'name' => 'required|string|max:255|unique:product_tbl,name',
+            'price' => 'required|numeric|min:0|max:1000000000000',
+            'size' => 'required|integer|min:0|max:60',
             'manufacturer' => 'required|string|max:255',
-            'stock' => 'required|integer',
+            'stock' => 'required|integer|min:0|max:1000000000000',
             'created_date' => 'sometimes|required|date',
             'updated_date' => 'sometimes|required|date',
             'status' => 'sometimes|required|integer|in:0,1'
@@ -83,6 +83,8 @@ class ProductController extends Controller
 
         return redirect()->route('admin.product.index')->with('successCreate', 'Product created successfully');
     }
+
+
 
     /**
      * Display the specified resource.
@@ -116,11 +118,11 @@ class ProductController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'name' => 'sometimes|required|string|max:255',
-            'price' => 'sometimes|required|numeric',
-            'size' => 'sometimes|required|integer',
+            'name' => 'required|string|max:255|unique:product_tbl,name,'.$id.',id',
+            'price' => 'sometimes|required|numeric|min:0|max:1000000000000',
+            'size' => 'sometimes|required|integer|min:0|max:60',
             'manufacturer' => 'sometimes|required|string|max:255',
-            'stock' => 'sometimes|required|integer',
+            'stock' => 'sometimes|required|integer|min:0|max:1000000000000',
             'created_date' => 'sometimes|required|date',
             'updated_date' => 'sometimes|required|date',
             'status' => 'sometimes|required|integer|in:0,1'
@@ -159,5 +161,7 @@ class ProductController extends Controller
         $recover = DB::table('product_tbl')->where('status', '0')->update(['status' => 1]);
         return redirect()->route('admin.product.index')->with('successRecoveryAll', 'All Product recovered successfully');
     }
+
+
 
 }
