@@ -21,7 +21,8 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                return redirect(RouteServiceProvider::HOME);
+                // Change the redirection route here
+                return redirect()->route('admin.product.index'); // Change 'admin.dashboard' to your desired route
             }
         }
 
