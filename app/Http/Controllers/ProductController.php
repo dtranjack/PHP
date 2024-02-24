@@ -73,7 +73,7 @@ class ProductController extends Controller
             'created_date' => now(),
             'updated_date' => now(),
             'status' => 1
-            ];
+        ];
 
         try {
             DB::table('product_tbl')->insert($fieldsToInsert);
@@ -83,7 +83,6 @@ class ProductController extends Controller
 
         return redirect()->route('admin.product.index')->with('successCreate', 'Product created successfully');
     }
-
 
 
     /**
@@ -118,7 +117,7 @@ class ProductController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'name' => 'required|string|max:255|unique:product_tbl,name,'.$id.',id',
+            'name' => 'required|string|max:255|unique:product_tbl,name,' . $id . ',id',
             'price' => 'sometimes|required|numeric|min:0|max:1000000000000',
             'size' => 'sometimes|required|integer|min:0|max:60',
             'manufacturer' => 'sometimes|required|string|max:255',
@@ -161,7 +160,4 @@ class ProductController extends Controller
         $recover = DB::table('product_tbl')->where('status', '0')->update(['status' => 1]);
         return redirect()->route('admin.product.index')->with('successRecoveryAll', 'All Product recovered successfully');
     }
-
-
-
 }
